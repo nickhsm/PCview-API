@@ -1,0 +1,8 @@
+fastapi
+pydantic
+uvicorn
+
+tensorflow
+keras
+numpy
+pillow
