@@ -45,7 +45,7 @@ def query_image(image: UserPicture):
         new_size = (max(real_size[0], real_size[1]), max(real_size[0], real_size[1]))
 
         # Pad with white make square
-        ImageOps.pad(image_to_edit, new_size, color="#fff")
+        image_to_edit = ImageOps.pad(image_to_edit, new_size, color="#fff")
 
         # Save to memory
         image_to_edit.save(new_image, format="jpeg")
