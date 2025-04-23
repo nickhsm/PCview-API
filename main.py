@@ -48,7 +48,7 @@ def query_image(image: UserPicture):
         ImageOps.pad(image_to_edit, new_size, color="#fff")
 
         # Save to memory
-        image_to_edit.save(new_image, format="jpg")
+        image_to_edit.save(new_image, format="jpeg")
 
 
     return_data = detector.detect_picture(new_image)
