@@ -38,7 +38,7 @@ def query_image(image: UserPicture):
 
     # Make image square
     new_image = io.BytesIO()
-    with Image.open(image_blob) as image_to_edit:
+    with Image.open(io.BytesIO(image_blob)) as image_to_edit:
         # Get size
         real_size = image_to_edit.size
         # Make size square
