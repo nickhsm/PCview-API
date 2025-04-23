@@ -1,4 +1,4 @@
-from io import BytesIO
+import io
 import fastapi
 import base64
 from PIL import Image, ImageOps
@@ -37,14 +37,17 @@ def query_image(image: UserPicture):
     image_blob = base64.b64decode(base64_string)
 
     # Make image square
-    # Get size
-    real_size = image_blob.size
-    # Make size square
-    new_size = (max(real_size[0], real_size[1]), max(real_size[0], real_size[1]))
-
-    new_image = BytesIO
+    new_image = io.BytesIO
     with Image.open(image_blob) as image_to_edit:
+        # Get size
+        real_size = image_to_edit.size
+        # Make size square
+        new_size = (max(real_size[0], real_size[1]), max(real_size[0], real_size[1]))
+
+        # Pad with white make square
         ImageOps.pad(image_to_edit, new_size, color="#fff")
+
+        # Save to memory
         image_to_edit.save(new_image, format="jpg")
 
 
