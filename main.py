@@ -1,10 +1,12 @@
+import io
 import fastapi
 import base64
+from PIL import Image, ImageOps
+from fastapi.middleware.cors import CORSMiddleware
 import detector
 import config
-from fastapi.middleware.cors import CORSMiddleware
 
-from models.post_upload_image import Image
+from models.post_upload_image import UserPicture
 
 
 app = fastapi.FastAPI(docs_url=config.documentation_url)
@@ -20,7 +22,7 @@ app.add_middleware(
 )
 
 @app.post("/upload")
-def query_image(image: Image):
+def query_image(image: UserPicture):
     """
     Give it a base64 encoded image and this function will return the following (example):
     {
@@ -34,6 +36,22 @@ def query_image(image: Image):
 
     image_blob = base64.b64decode(base64_string)
 
-    return_data = detector.detect_picture(image_blob)
+    # Make image square
+    new_image = io.BytesIO()
+    with Image.open(io.BytesIO(image_blob)) as image_to_edit:
+        # Get size
+        real_size = image_to_edit.size
+        # Make size square
+        new_size = (max(real_size[0], real_size[1]), max(real_size[0], real_size[1]))
+
+        # Pad with white make square
+        image_to_edit = ImageOps.pad(image_to_edit, new_size, color="#fff")
+
+        # Save to memory
+        image_to_edit.save(new_image, format="jpeg")
+        image_to_edit.save("debug_picture.jpg", format="jpeg")
+
+
+    return_data = detector.detect_picture(new_image)
 
     return {"result": return_data}

@@ -15,7 +15,7 @@ def detect_picture(image_data):
     img_height = 180
     img_width = 180
 
-    img = PIL.Image.open(io.BytesIO(image_data)).resize((img_height, img_width))
+    img = PIL.Image.open(image_data).resize((img_height, img_width))
 
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)

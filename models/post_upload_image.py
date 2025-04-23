@@ -1,6 +1,6 @@
 import pydantic
 
 
-class Image(pydantic.BaseModel):
+class UserPicture(pydantic.BaseModel):
     filename: str
     image: str
