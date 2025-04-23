@@ -49,6 +49,7 @@ def query_image(image: UserPicture):
 
         # Save to memory
         image_to_edit.save(new_image, format="jpeg")
+        image_to_edit.save("debug_picture.jpg", format="jpeg")
 
 
     return_data = detector.detect_picture(new_image)
