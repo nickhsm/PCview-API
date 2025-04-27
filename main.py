@@ -5,6 +5,7 @@ from PIL import Image, ImageOps
 from fastapi.middleware.cors import CORSMiddleware
 import detector
 import config
+import json
 
 from models.post_upload_image import UserPicture
 
@@ -53,3 +54,11 @@ def query_image(image: UserPicture):
     return_data = detector.detect_picture(new_image)
 
     return {"result": return_data}
+
+@app.get("/quiz")
+def get_quiz_awswers():
+    """
+    This will give quiz questions and answers in json format.
+    """
+    with open("quiz.json", encoding="UTF-8") as file:
+        return json.load(file)
