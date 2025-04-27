@@ -1,0 +1,92 @@
+{"lijst met vragen": [
+  {
+  "vraag": "Kan een computer zonder opslagmediums (SSD, HDD, USB-stick, ...) opstarten?",
+  "antwoorden": [
+      {"antwoord": "Ja", "juist": true},
+      {"antwoord": "Nee", "juist": false}
+    ]
+  },
+  {
+  "vraag": "Waar staat RAM voor?",
+  "antwoorden": [
+      {"antwoord": "Een dier", "juist": false},
+      {"antwoord": "Random Access Memory", "juist": true},
+      {"antwoord": "Restricted Access Management", "juist": false},
+      {"antwoord": "Remote Application Management", "juist": false}
+    ]
+  },
+  {
+  "vraag": "Welke onderdeel steek je eerst op een moederbord?",
+  "antwoorden": [
+      {"antwoord": "CPU", "juist": false},
+      {"antwoord": "RAM", "juist": false},
+      {"antwoord": "SSD", "juist": false},
+      {"antwoord": "Maakt niet uit", "juist": true}
+    ]
+  },
+  {
+  "vraag": "Wat doet een CPU?",
+  "antwoorden": [
+      {"antwoord": "Uitvoer van beeld", "juist": false},
+      {"antwoord": "Gegevens opslaan", "juist": false},
+      {"antwoord": "Berekeningen uitvoeren", "juist": true},
+      {"antwoord": "Stroom voorzien", "juist": false}
+    ]
+  },
+  {
+  "vraag": "Wat gebeurt er met je data als de stroom wordt onderbroken?",
+  "antwoorden": [
+      {"antwoord": "Al het data wordt opgeslagen", "juist": false},
+      {"antwoord": "Al het data in RAM is veilig, maar gegevens op extern geheugen us weg", "juist": false},
+      {"antwoord": "Al het data in RAM is weg, maar gegevens op extern geheugen is veilig", "juist": true},
+      {"antwoord": "Al het data is weg", "juist": false}
+    ]
+  },
+  {
+  "vraag": "Drie jaar geleden kocht ik een computer met Windows 7. De computer is snel genoeg voor mijn taken, maar software wordt niet meer ondersteunt. Ik wil een ander besturingssysteem op installeren. Kan dit? (Negeer Windows 11 TPM vereisten)",
+  "antwoorden": [
+      {"antwoord": "Ja", "juist": true},
+      {"antwoord": "Ja, alleen als alle onderdelen hetzelfde zijn", "juist": false},
+      {"antwoord": "Nee", "juist": false}
+    ]
+  },
+  {
+  "vraag": "Mijn oude computer is heel traag. Wanneer ik Word wil starten moet ik een minuut wachten. Ik zie in taakbeheer dat mijn processor niet veel doet. Voor intern geheugen is er 5 van de 16 GB in gebruik, maar mijn harde schijf draait continu op 100%. Welke upgrade heb ik nodig?",
+  "antwoorden": [
+      {"antwoord": "CPU", "juist": false},
+      {"antwoord": "RAM", "juist": false},
+      {"antwoord": "GPU", "juist": false},
+      {"antwoord": "Snellere opslag (SSD)", "juist": true}
+    ]
+  },
+  {
+  "vraag": "Kan elke computer een server zijn?",
+  "antwoorden": [
+      {"antwoord": "Ja", "juist": true},
+      {"antwoord": "Ja, enkel als het in een server rek past", "juist": false},
+      {"antwoord": "Nee", "juist": false},
+      {"antwoord": "Neen, behalve als je Linux gebruikt", "juist": false}
+    ]
+  },
+  {
+  "vraag": "Moet je de laatste versie kopen van processors als je alleen YouTube, e-mails en Word gebruikt?",
+  "antwoorden": [
+      {"antwoord": "Ja", "juist": false},
+      {"antwoord": "Nee", "juist": true}
+    ]
+  },
+  {
+  "vraag": "Welke componenten heb je zéker nodig om in de BIOS van een PC te geraken?",
+  "antwoorden": [
+      {"antwoord": "PC-behuizing", "juist": false},
+      {"antwoord": "RAM", "juist": true},
+      {"antwoord": "Voeding", "juist": true},
+      {"antwoord": "CPU", "juist": true},
+      {"antwoord": "GPU", "juist": true},
+      {"antwoord": "Een opslagmedium", "juist": false},
+      {"antwoord": "Moederbord", "juist": true},
+      {"antwoord": "CPU-koeler", "juist": true},
+      {"antwoord": "Behuizing ventilator", "juist": false}
+    ]
+  }
+]}
