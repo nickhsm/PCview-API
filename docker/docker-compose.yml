@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  fastapi:
+    build: ./app
+    container_name: fastapi_app
+    restart: always
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+    networks:
+      - my_network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare_tunnel
+    restart: always
+    command: tunnel run --token <tunnel-token>
+    environment:
+      - TUNNEL_TOKEN=<tunnel-token>
+    volumes:
+      - ./cloudflared:/etc/cloudflared
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+
