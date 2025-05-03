@@ -76,4 +76,4 @@ def post_quiz_explanation(type: str):
     if isinstance(neon_anwser, Exception):
         return neon_anwser, 500
 
-    return {"explanation": neon_anwser[0]}
+    return {"explanation": neon_anwser[0][0]}
