@@ -42,11 +42,11 @@ CREATE TABLE IF NOT EXISTS "PCviewdb"."AntwoordHighscore"(
 
 CREATE TABLE IF NOT EXISTS "PCviewdb"."UitlegComponent"(
     "uitlegComponentId" SERIAL NOT NULL PRIMARY KEY,
-    "uitlegComponentNaam" VARCHAR(32) NOT NULL,
+    "componentNaam" VARCHAR(32) NOT NULL,
     "uitlegComponent" VARCHAR(2048) NOT NULL
 );
 
-INSERT INTO "PCviewdb"."UitlegComponent" ("uitlegComponentNaam", "uitlegComponent")
+INSERT INTO "PCviewdb"."UitlegComponent" ("componentNaam", "uitlegComponent")
 VALUES ('Behuizing', 'De behuizing dient om je componenten te beschermen. De vormen lopen ver uiteen afhankelijk van de toepassing of voorkeur.'),
     ('Processor', 'De processor in het Engels is Central Processing Unit, afgekort CPU. De processor is het brein van de computer.\nKort door de bocht, een processor is een klein plaatje gemaakt van zand. Met behulp van UV-straling kunnen we kanalen maken met sluizen. Deze sluizen kunnen open en dicht, respectievelijk in computer term een 1 en een 0. Zonder dit kan de computer niet opstarten.'),
     ('Processor koeler', 'Processoren verbruiken relatief gezien veel elektriciteit en worden dus warm. Daarom moeten deze gekoeld worden.\nVormen en manier van koelen lopen ver uiteen. De meest voorkomende manier is luchtkoeling, want het is goedkoop en gaan erg lang mee. Ze hebben alleen de ventilator als bewegende onderdeel. Als de ventilator toch kapot gaan is dit ook makkelijk te vervangen.\nEen andere vorm is waterkoeling. Je kan dit kant-en-klaar of elk onderdeel apart kopen.\nDe all-in-one of AIO-waterkoeler is kant-en-klaar, een doorsnee AIO-waterkoeler is beter dan een doorsnee luchtkoeler. Het nadeel is dat ze niet modulair zijn en minder lang mee gaan. Als de waterpomp kapot is moet de hele waterkoeling systeem vervangen worden.\nEen custom waterloop is een waterkoeling systeem dat de gebruiker zelf in elkaar steekt. Dit bestaat uit waterpomp, de coldplate (dit maakt contact met de processor), de buizen en het reservoir. Het voordeel is dat dit langer meegaan dan de AIO. Maar heeft meer onderhoud en initiële investering nodig.'),
