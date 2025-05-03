@@ -1,0 +1,6 @@
+# If you need documentation in dev environment
+DOCS_URL=""
+# comma seperated list
+ALLOWED_ORIGINS=""
+# you get this from neon
+DB_CONNECTION=""

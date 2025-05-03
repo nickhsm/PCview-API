@@ -1,8 +1,11 @@
+# API
 fastapi
 pydantic
 uvicorn
 dotenv
+psycopg[binary]
 
+# AI
 tensorflow
 keras
 numpy

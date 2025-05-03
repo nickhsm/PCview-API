@@ -6,8 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import detector
 import config
 import json
+import database
 
 from models.post_upload_image import UserPicture
+from queries import quiz_explanation
 
 
 app = fastapi.FastAPI(docs_url=config.documentation_url)
@@ -62,3 +64,16 @@ def get_quiz_awswers():
     """
     with open("quiz.json", encoding="UTF-8") as file:
         return json.load(file)
+
+@app.get("/quiz/uitleg")
+def post_quiz_explanation(type: str):
+    """
+    This will give an explanation about the component of a PC.
+    """
+    query = quiz_explanation.quiz_explanation_query
+    neon_anwser = database.execute_sql_query(query, (type,))
+
+    if isinstance(neon_anwser, Exception):
+        return neon_anwser, 500
+
+    return {"explanation": neon_anwser[0][0]}
