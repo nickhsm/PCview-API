@@ -102,3 +102,18 @@ VALUES
     ('CPU-koeler', 0, 0, 10),
     ('Behuizing ventilator', 0, 0, 10)
 ;
+
+INSERT INTO "PCviewdb"."Vraag" ("vraagId", "vraag") 
+VALUES
+    (1, 'Kan een computer zonder opslagmediums (SSD, HDD, USB-stick, ...) opstarten?'),
+    (2, 'Waar staat RAM voor?'),
+    (3, 'Welke onderdeel steek je eerst op een moederbord?'),
+    (4, 'Wat doet een CPU?'),
+    (5, 'Wat gebeurt er met je data als de stroom wordt onderbroken?'),
+    (6, 'Drie jaar geleden kocht ik een computer met Windows 7. De computer is snel genoeg voor mijn taken, maar software wordt niet meer ondersteunt. Ik wil een ander besturingssysteem op installeren. Kan dit? (Negeer Windows 11 TPM vereisten)'),
+    (7, 'Mijn oude computer is heel traag. Wanneer ik Word wil starten moet ik een minuut wachten. Ik zie in taakbeheer dat mijn processor niet veel doet. Voor intern geheugen is er 5 van de 16 GB in gebruik, maar mijn harde schijf draait continu op 100%. Welke upgrade heb ik nodig?'),
+    (8, 'Kan elke computer een server zijn?'),
+    (9, 'Moet je de laatste versie kopen van processors als je alleen YouTube, e-mails en Word gebruikt?'),
+    (10, 'Welke componenten heb je zéker nodig om in de BIOS van een PC te geraken?')
+;
+
