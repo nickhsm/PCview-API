@@ -58,3 +58,62 @@ VALUES ('Behuizing', 'De behuizing dient om je componenten te beschermen. De vor
     ('RAM stick', 'RAM of wel Random Access Memory is het interne geheugen van computers. Hoe meer interne geheugen, hoe meer programma''s je tegelijkertijd open kan hebben.\nDit is een van de makkelijkste onderdelen om te upgraden, maar jammer genoeg zijn we in de laptop industrie dat er meer en meer RAM worden gesoldeerd op het moederbord. Dit valt niet te upgraden.\nDaarom raden we je aan om niet minder dan 16 GB aan RAM te kopen.'),
     ('SSD', 'Solid state drive of SSD is een opslagmedium zonder bewegende onderdelen. Data wordt gelezen door elektronen te verplaatsen in "cellen". Als er geen elektron in een cel zit is het een 0, als dat wel zo is het een 1.\nHet voordeel ten opzichte van een harde schijf is dat deze heel snel zijn, in sommige gevallen honderden keren sneller.\nHet nadeel is dat deze duurder zijn dan harde schijven.')
 ;
+
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId") 
+VALUES
+    ('Ja', 0, 0, 1),
+    ('Nee', 1, 1, 1),
+    ('Een dier', 0, 0, 2),
+    ('Random Access Memory', 1, 1, 2),
+    ('Restricted Access Management', 0, 0, 2),
+    ('Remote Application Management', 0, 0, 2),
+    ('CPU', 0, 0, 3),
+    ('RAM', 0, 0, 3),
+    ('SSD', 0, 0, 3),
+    ('Maakt niet uit', 1, 1, 3),
+    ('Uitvoer voor beeld', 0, 0, 4),
+    ('Gegevens opslaan', 0, 0, 4),
+    ('Berekeningen uitvoeren', 1, 1, 4),
+    ('Stroom voorzien', 0, 0, 4),
+    ('Al het data wordt opgeslagen', 0, 0, 5),
+    ('Al het data in RAM is veilig, maar gegevens op extern geheugen is weg', 0, 0, 5),
+    ('Al het data in RAM is weg, maar gegevens op extern geheugen is veilig', 1, 1, 5),
+    ('Al het data is weg', 0, 0, 5),
+    ('Ja', 1, 1, 6),
+    ('Ja, alleen als alle onderdelen hetzelfde zijn', 0, 0, 6),
+    ('Nee', 0, 0, 6),
+    ('CPU', 0, 0, 7),
+    ('RAM', 0, 0, 7),
+    ('GPU', 0, 0, 7),
+    ('Snellere opslag (SSD)', 1, 1, 7),
+    ('Ja', 1, 1, 8),
+    ('Ja, enkel als het in een server rek past', 0, 0, 8),
+    ('Nee', 0, 0, 8),
+    ('Neen, behalve als je Linux gebruikt', 0, 0, 8),
+    ('Ja', 0, 0, 9),
+    ('Nee', 1, 1, 9),
+    ('PC-behuizing', 0, 0, 10),
+    ('RAM', 1, 1, 10),
+    ('Voeding', 1, 1, 10),
+    ('CPU', 1, 1, 10),
+    ('GPU', 0, 0, 10),
+    ('Een opslagmedium', 0, 0, 10),
+    ('Moederbord', 1, 1, 10),
+    ('CPU-koeler', 0, 0, 10),
+    ('Behuizing ventilator', 0, 0, 10)
+;
+
+INSERT INTO "PCviewdb"."Vraag" ("vraagId", "vraag") 
+VALUES
+    (1, 'Kan een computer zonder opslagmediums (SSD, HDD, USB-stick, ...) opstarten?'),
+    (2, 'Waar staat RAM voor?'),
+    (3, 'Welke onderdeel steek je eerst op een moederbord?'),
+    (4, 'Wat doet een CPU?'),
+    (5, 'Wat gebeurt er met je data als de stroom wordt onderbroken?'),
+    (6, 'Drie jaar geleden kocht ik een computer met Windows 7. De computer is snel genoeg voor mijn taken, maar software wordt niet meer ondersteunt. Ik wil een ander besturingssysteem op installeren. Kan dit? (Negeer Windows 11 TPM vereisten)'),
+    (7, 'Mijn oude computer is heel traag. Wanneer ik Word wil starten moet ik een minuut wachten. Ik zie in taakbeheer dat mijn processor niet veel doet. Voor intern geheugen is er 5 van de 16 GB in gebruik, maar mijn harde schijf draait continu op 100%. Welke upgrade heb ik nodig?'),
+    (8, 'Kan elke computer een server zijn?'),
+    (9, 'Moet je de laatste versie kopen van processors als je alleen YouTube, e-mails en Word gebruikt?'),
+    (10, 'Welke componenten heb je zéker nodig om in de BIOS van een PC te geraken?')
+;
+
