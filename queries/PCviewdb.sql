@@ -9,12 +9,12 @@ CREATE SCHEMA IF NOT EXISTS "PCviewdb";
 
 CREATE TABLE IF NOT EXISTS "PCviewdb"."Vraag"(
     "vraagId" SERIAL NOT NULL PRIMARY KEY,
-    "vraag" VARCHAR(1024) NOT NULL
+    "vraag" TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "PCviewdb"."Antwoord"(
     "antwoordId" SERIAL NOT NULL PRIMARY KEY,
-    "antwoord" VARCHAR(1024) NOT NULL,
+    "antwoord" TEXT NOT NULL,
     "correct" BOOLEAN NOT NULL,
     "score" INT,
     "vraagId" INT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "PCviewdb"."Antwoord"(
 
 CREATE TABLE IF NOT EXISTS "PCviewdb"."Highscore"(
     "highscoreId" SERIAL NOT NULL PRIMARY KEY,
-    "gebruikersnaam" VARCHAR(45) NOT NULL
+    "gebruikersnaam" TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "PCviewdb"."AntwoordHighscore"(
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS "PCviewdb"."AntwoordHighscore"(
 
 CREATE TABLE IF NOT EXISTS "PCviewdb"."UitlegComponent"(
     "uitlegComponentId" SERIAL NOT NULL PRIMARY KEY,
-    "componentNaam" VARCHAR(32) NOT NULL,
-    "uitlegComponent" VARCHAR(2048) NOT NULL
+    "componentNaam" TEXT NOT NULL,
+    "uitlegComponent" TEXT NOT NULL
 );
 
 INSERT INTO "PCviewdb"."UitlegComponent" ("componentNaam", "uitlegComponent")
