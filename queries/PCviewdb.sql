@@ -116,6 +116,3 @@ VALUES
     ('CPU-koeler', false, 0, 10),
     ('Behuizing ventilator', false, 0, 10)
 ;
-
-
-
