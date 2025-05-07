@@ -58,7 +58,7 @@ def query_image(image: UserPicture):
     return {"result": return_data}
 
 @app.get("/quiz")
-def get_quiz_answer(classname: str):
+def get_quiz_answer(classname: str = "Algemeen"):
     """
     This will give quiz questions and answers in json format.
     """
