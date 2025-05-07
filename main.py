@@ -7,6 +7,7 @@ import detector
 import config
 import json
 import database
+import random
 
 from models.post_upload_image import UserPicture
 from queries import quiz_explanation
@@ -117,9 +118,19 @@ def post_quiz_explanation(type: str):
     This will give an explanation about the component of a PC.
     """
     query = quiz_explanation.quiz_explanation_query
-    neon_anwser = database.execute_sql_query(query, (type,))
+    neon_answer = database.execute_sql_query(query, (type,))
 
-    if isinstance(neon_anwser, Exception):
-        return neon_anwser, 500
+    if isinstance(neon_answer, Exception):
+        return neon_answer, 500
 
-    return {"explanation": neon_anwser[0][0]}
+    return {"explanation": neon_answer[0][0]}
+
+@app.get("/funfact")
+def get_funfact():
+    """
+    This will give a random funfact from a file.
+    """
+    with open("funfacts.json", encoding="UTF-8") as file:
+        json_content = json.load(file)
+        fun_facts = json_content["fun facts"]
+        return random.choice(fun_facts)
