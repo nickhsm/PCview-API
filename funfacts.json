@@ -1,0 +1,32 @@
+{
+	"fun facts": [
+		{
+			"titel": "De eerste “bug” was echt een insect",
+			"inhoud": "In 1947 vond Grace Hopper en haar team een mot in de Mark II-computer bij Harvard. Ze plakten het insect in hun logboek met de notitie \"First actual case of bug being found.\""
+		},
+		{
+			"titel": "QWERTY was ontworpen om typisten langzamer te maken",
+			"inhoud": "Oude typemachines liepen vast als je te snel typte, dus werd het toetsenbord express minder logisch gemaakt."
+		},
+		{
+			"titel": "Er zijn meer mogelijke schakelingen in een moderne chip dan sterren in het melkwegstelsel",
+			"inhoud": "Eén moderne CPU bevat miljarden transistors, terwijl het melkwegstelsel naar schatting zo’n 100 à 400 miljard sterren bevat."
+		},
+		{
+			"titel": "Het populairste wachtwoord ter wereld is… ‘123456’",
+			"inhoud": "Jaar na jaar. En op nummer 2? ‘password’. Niet erg veilig dus."
+		},
+		{
+			"titel": "De allereerste 1 GB harde schijf was zo groot als een koelkast",
+			"inhoud": "IBM lanceerde die in 1980… voor maar liefst $40.000!"
+		},
+		{
+			"titel": "Er bestaat een programmeertaal gebaseerd op Shakespeare",
+			"inhoud": "Elke programmaregel ziet eruit als een toneelstuk. Het is compleet onpraktisch maar geniaal."
+		},
+		{
+			"titel": "Beleefdheid kost miljoenen",
+			"inhoud": "Elke keer dat je “alstublieft” of “dankjewel” typt tegen ChatGPT, voeg je extra woorden toe aan je prompt. Deze beleefdheidsvormen vergen meer verwerkingskracht en energie. Volgens OpenAI kost dit het bedrijf jaarlijks tientallen miljoenen dollars."
+		}
+	]
+}
