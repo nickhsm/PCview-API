@@ -63,6 +63,8 @@ def get_quiz_answer(classname: str = "Algemeen"):
     """
     This will give quiz questions and answers in json format.
     """
+    if classname == "null":
+        classname = "Algemeen"
     query = quiz_explanation.quiz_query
     neon_answer = database.execute_sql_query(query, (classname,))
 
