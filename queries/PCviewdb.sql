@@ -95,7 +95,7 @@ WITH nieuwe_vraag AS (
     INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
     VALUES (
         'Kan een computer zonder opslagmediums (SSD, HDD, USB-stick, ...) opstarten?',
-        'Omdat ',
+        'Nee, een computer kan niet opstarten zonder opslagmedium. Er is altijd een opslagplaats nodig om het besturingssysteem en de opstartbestanden van te laden. Zonder opslagmedium weet de computer niet wat hij moet uitvoeren na het inschakelen. Enkel via netwerkboot is opstarten mogelijk, maar dan komt het besturingssysteem alsnog van een externe bron.',
         (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
     )
     RETURNING "vraagId"
@@ -105,6 +105,199 @@ INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
 SELECT 'Ja', FALSE, 0, "vraagId" FROM nieuwe_vraag
 UNION ALL
 SELECT 'Nee', TRUE, 1, "vraagId" FROM nieuwe_vraag;
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waar staat RAM voor?',
+        'RAM staat voor **Random Access Memory**. Het is het tijdelijke werkgeheugen van een computer waarin gegevens en programma’s worden opgeslagen die de processor direct nodig heeft. RAM is vluchtig geheugen, wat betekent dat alle gegevens verdwijnen zodra de computer wordt uitgeschakeld.
+',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een dier', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Random Acces Memory', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Restricted Acces Management', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Remote Application Management', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welk onderdeel steek je eerst op een moederbord?',
+        'De volgorde waarin je CPU, RAM en SSD op een moederbord plaatst, maakt in principe niet uit. Zolang je alle componenten correct en zorgvuldig installeert, werkt het systeem normaal, ongeacht welke je eerst monteert.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'SSD', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Maakt niet uit', TRUE, 1, "vraagId" FROM nieuwe_vraag;
+
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat doet een CPU?',
+        'Een CPU voert berekeningen uit en verwerkt instructies van software en hardware. Het is het centrale reken- en aansturingsonderdeel van de computer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Uitvoer voor beeld', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Gegevens opslaan', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Berekeningen uitvoeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Stroom voorzien', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er met je data als de stroom wordt onderbroken?',
+        'Als de stroom wordt onderbroken, gaat alle data in het **RAM-geheugen** verloren. Gegevens die op **extern geheugen** zoals een SSD, HDD of USB-stick staan, blijven wel veilig bewaard.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Al het data wordt opgeslagen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Al het data in RAM is veilig, maar gegevens op extern geheugen is weg', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Al het data in RAM is weg, maar gegevens op extern geheugen is veilig', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Al het data is weg', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Drie jaar geleden kocht ik een computer met Windows 7. De computer is snel genoeg voor mijn taken, maar software wordt niet meer ondersteunt. Ik wil een ander besturingssysteem op installeren. Kan dit? (Negeer Windows 11 TPM vereisten)',
+        'Ja, je kunt een ander besturingssysteem installeren. Zolang je computer de systeemeisen van het nieuwe besturingssysteem aankan, is overstappen mogelijk — bijvoorbeeld naar een recentere Windows-versie of een Linux-distributie.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Ja', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ja, alleen als alle onderdelen hetzelfde zijn', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Nee', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Mijn oude computer is heel traag. Wanneer ik Word wil starten moet ik een minuut wachten. Ik zie in taakbeheer dat mijn processor niet veel doet. Voor intern geheugen is er 5 van de 16 GB in gebruik, maar mijn harde schijf draait continu op 100%. Welke upgrade heb ik nodig?',
+        'De upgrade die je nodig hebt is een **snellere opslag**, namelijk een **SSD**. Een traditionele **HDD** (harde schijf) is veel langzamer dan een SSD, wat de traagheid van je computer veroorzaakt, vooral wanneer de schijf continu op 100% draait. Het vervangen van je HDD door een SSD zal de snelheid van je computer aanzienlijk verbeteren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'GPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Snellere opslag (SSD)', TRUE, 1, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Kan elke computer een server zijn?',
+        'Ja, elke computer kan in principe een server zijn, zolang deze voldoet aan de benodigde hardwarevereisten en geschikt is voor de taak die je wilt uitvoeren. Dit betekent dat je de juiste software (zoals een webserver, database of andere serverapplicaties) moet installeren en configureren, ongeacht of het een desktop, laptop of een andere soort computer is.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Ja', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ja, enkel als het in een server rek past', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Nee', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Neen, behalve als je Linux gebruikt', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Moet je de laatste versie kopen van processors als je alleen YouTube, e-mails en Word gebruikt?',
+        'Nee, je hoeft niet de laatste versie van processors te kopen als je alleen YouTube, e-mails en Word gebruikt. Voor deze basistaken is een oudere, goedkopere processor meestal voldoende, aangezien ze geen hoge rekenkracht vereisen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Nee', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ja', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke componenten heb je zéker nodig om in de BIOS van een PC te geraken?',
+        'Om in de BIOS van een PC te geraken, heb je minimaal de **processor (CPU)**, **moederbord**, **geheugen (RAM)**, **voedingsunit (PSU)**, **processor koeler**, en eventueel een **grafische kaart (GPU)** nodig (indien je geen geïntegreerde grafische chip hebt). Zonder deze componenten kan de computer niet opstarten en kun je de BIOS niet bereiken.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'PC-behuizing', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voeding', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'CPU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'GPU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een opslagmedium', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Moederbord', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'CPU-koeler', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Behuizing ventilator', FALSE, 0, "vraagId" FROM nieuwe_vraag;
 
 
 
