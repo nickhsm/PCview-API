@@ -70,60 +70,2173 @@ VALUES ('Behuizing', 'De behuizing dient om je componenten te beschermen. De vor
     ('SSD', 'Solid state drive of SSD is een opslagmedium zonder bewegende onderdelen. Data wordt gelezen door elektronen te verplaatsen in "cellen". Als er geen elektron in een cel zit is het een 0, als dat wel zo is het een 1.\nHet voordeel ten opzichte van een harde schijf is dat deze heel snel zijn, in sommige gevallen honderden keren sneller.\nHet nadeel is dat deze duurder zijn dan harde schijven.')
 ;
 
-INSERT INTO "PCviewdb"."Vraag" ("vraag") 
-VALUES
-	('Kan een computer zonder opslagmediums (SSD, HDD, USB-stick, ...) opstarten?'),
-	('Waar staat RAM voor?'),
-	('Welke onderdeel steek je eerst op een moederbord?'),
-	('Wat doet een CPU?'),
-	('Wat gebeurt er met je data als de stroom wordt onderbroken?'),
-	('Drie jaar geleden kocht ik een computer met Windows 7. De computer is snel genoeg voor mijn taken, maar software wordt niet meer ondersteunt. Ik wil een ander besturingssysteem op installeren. Kan dit? (Negeer Windows 11 TPM vereisten)'),
-	('Mijn oude computer is heel traag. Wanneer ik Word wil starten moet ik een minuut wachten. Ik zie in taakbeheer dat mijn processor niet veel doet. Voor intern geheugen is er 5 van de 16 GB in gebruik, maar mijn harde schijf draait continu op 100%. Welke upgrade heb ik nodig?'),
-	('Kan elke computer een server zijn?'),
-	('Moet je de laatste versie kopen van processors als je alleen YouTube, e-mails en Word gebruikt?'),
-	('Welke componenten heb je zéker nodig om in de BIOS van een PC te geraken?')
-;
 
-INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId") 
+
+
+-- Voeg categorieÃ«n toe
+INSERT INTO "PCviewdb"."Categorie" ("naam")
 VALUES
-    ('Ja', false, 0, 1),
-    ('Nee', true, 1, 1),
-    ('Een dier', false, 0, 2),
-    ('Random Access Memory', true, 1, 2),
-    ('Restricted Access Management', false, 0, 2),
-    ('Remote Application Management', false, 0, 2),
-    ('CPU', false, 0, 3),
-    ('RAM', false, 0, 3),
-    ('SSD', false, 0, 3),
-    ('Maakt niet uit', true, 1, 3),
-    ('Uitvoer voor beeld', false, 0, 4),
-    ('Gegevens opslaan', false, 0, 4),
-    ('Berekeningen uitvoeren', true, 1, 4),
-    ('Stroom voorzien', false, 0, 4),
-    ('Al het data wordt opgeslagen', false, 0, 5),
-    ('Al het data in RAM is veilig, maar gegevens op extern geheugen is weg', false, 0, 5),
-    ('Al het data in RAM is weg, maar gegevens op extern geheugen is veilig', true, 1, 5),
-    ('Al het data is weg', false, 0, 5),
-    ('Ja', true, 1, 6),
-    ('Ja, alleen als alle onderdelen hetzelfde zijn', true, 0, 6),
-    ('Nee', false, 0, 6),
-    ('CPU', false, 0, 7),
-    ('RAM', false, 0, 7),
-    ('GPU', false, 0, 7),
-    ('Snellere opslag (SSD)', true, 1, 7),
-    ('Ja', true, 1, 8),
-    ('Ja, enkel als het in een server rek past', false, 0, 8),
-    ('Nee', false, 0, 8),
-    ('Neen, behalve als je Linux gebruikt', false, 0, 8),
-    ('Ja', false, 0, 9),
-    ('Nee', true, 1, 9),
-    ('PC-behuizing', false, 0, 10),
-    ('RAM', true, 1, 10),
-    ('Voeding', true, 1, 10),
-    ('CPU', true, 1, 10),
-    ('GPU', false, 0, 10),
-    ('Een opslagmedium', false, 0, 10),
-    ('Moederbord', true, 1, 10),
-    ('CPU-koeler', false, 0, 10),
-    ('Behuizing ventilator', false, 0, 10)
-;
+    ('Behuizing'),
+    ('Processor'),
+    ('Processor koeler'),
+    ('Videokaart'),
+    ('Harde schijf'),
+    ('Moederbord'),
+    ('Netwerk kaart'),
+    ('Voeding'),
+    ('RAM stick'),
+    ('SSD'),
+    ('Algemeen');
+
+
+
+-- Testvraag voor algemeen
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Kan een computer zonder opslagmediums (SSD, HDD, USB-stick, ...) opstarten?',
+        'Nee, een computer kan niet opstarten zonder opslagmedium. Er is altijd een opslagplaats nodig om het besturingssysteem en de opstartbestanden van te laden. Zonder opslagmedium weet de computer niet wat hij moet uitvoeren na het inschakelen. Enkel via netwerkboot is opstarten mogelijk, maar dan komt het besturingssysteem alsnog van een externe bron.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Ja', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Nee', TRUE, 1, "vraagId" FROM nieuwe_vraag;
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waar staat RAM voor?',
+        'RAM staat voor **Random Access Memory**. Het is het tijdelijke werkgeheugen van een computer waarin gegevens en programma’s worden opgeslagen die de processor direct nodig heeft. RAM is vluchtig geheugen, wat betekent dat alle gegevens verdwijnen zodra de computer wordt uitgeschakeld.
+',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een dier', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Random Acces Memory', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Restricted Acces Management', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Remote Application Management', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welk onderdeel steek je eerst op een moederbord?',
+        'De volgorde waarin je CPU, RAM en SSD op een moederbord plaatst, maakt in principe niet uit. Zolang je alle componenten correct en zorgvuldig installeert, werkt het systeem normaal, ongeacht welke je eerst monteert.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'SSD', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Maakt niet uit', TRUE, 1, "vraagId" FROM nieuwe_vraag;
+
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat doet een CPU?',
+        'Een CPU voert berekeningen uit en verwerkt instructies van software en hardware. Het is het centrale reken- en aansturingsonderdeel van de computer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Uitvoer voor beeld', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Gegevens opslaan', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Berekeningen uitvoeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Stroom voorzien', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er met je data als de stroom wordt onderbroken?',
+        'Als de stroom wordt onderbroken, gaat alle data in het **RAM-geheugen** verloren. Gegevens die op **extern geheugen** zoals een SSD, HDD of USB-stick staan, blijven wel veilig bewaard.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Al het data wordt opgeslagen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Al het data in RAM is veilig, maar gegevens op extern geheugen is weg', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Al het data in RAM is weg, maar gegevens op extern geheugen is veilig', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Al het data is weg', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Drie jaar geleden kocht ik een computer met Windows 7. De computer is snel genoeg voor mijn taken, maar software wordt niet meer ondersteunt. Ik wil een ander besturingssysteem op installeren. Kan dit? (Negeer Windows 11 TPM vereisten)',
+        'Ja, je kunt een ander besturingssysteem installeren. Zolang je computer de systeemeisen van het nieuwe besturingssysteem aankan, is overstappen mogelijk — bijvoorbeeld naar een recentere Windows-versie of een Linux-distributie.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Ja', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ja, alleen als alle onderdelen hetzelfde zijn', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Nee', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Mijn oude computer is heel traag. Wanneer ik Word wil starten moet ik een minuut wachten. Ik zie in taakbeheer dat mijn processor niet veel doet. Voor intern geheugen is er 5 van de 16 GB in gebruik, maar mijn harde schijf draait continu op 100%. Welke upgrade heb ik nodig?',
+        'De upgrade die je nodig hebt is een **snellere opslag**, namelijk een **SSD**. Een traditionele **HDD** (harde schijf) is veel langzamer dan een SSD, wat de traagheid van je computer veroorzaakt, vooral wanneer de schijf continu op 100% draait. Het vervangen van je HDD door een SSD zal de snelheid van je computer aanzienlijk verbeteren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'GPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Snellere opslag (SSD)', TRUE, 1, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Kan elke computer een server zijn?',
+        'Ja, elke computer kan in principe een server zijn, zolang deze voldoet aan de benodigde hardwarevereisten en geschikt is voor de taak die je wilt uitvoeren. Dit betekent dat je de juiste software (zoals een webserver, database of andere serverapplicaties) moet installeren en configureren, ongeacht of het een desktop, laptop of een andere soort computer is.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Ja', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ja, enkel als het in een server rek past', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Nee', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Neen, behalve als je Linux gebruikt', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Moet je de laatste versie kopen van processors als je alleen YouTube, e-mails en Word gebruikt?',
+        'Nee, je hoeft niet de laatste versie van processors te kopen als je alleen YouTube, e-mails en Word gebruikt. Voor deze basistaken is een oudere, goedkopere processor meestal voldoende, aangezien ze geen hoge rekenkracht vereisen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Nee', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ja', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+--
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke componenten heb je zéker nodig om in de BIOS van een PC te geraken?',
+        'Om in de BIOS van een PC te geraken, heb je minimaal de **processor (CPU)**, **moederbord**, **geheugen (RAM)**, **voedingsunit (PSU)**, **processor koeler**, en eventueel een **grafische kaart (GPU)** nodig (indien je geen geïntegreerde grafische chip hebt). Zonder deze componenten kan de computer niet opstarten en kun je de BIOS niet bereiken.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Algemeen')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'PC-behuizing', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voeding', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'CPU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'GPU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een opslagmedium', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Moederbord', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'CPU-koeler', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Behuizing ventilator', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+
+
+-- Voeg een vraag toe en vang de gegenereerde vraagId op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor staat de afkorting SSD?',
+        'SSD staat voor "Solid State Drive". Dit is een type opslagmedium dat gebruik maakt van flashgeheugen om gegevens op te slaan, in tegenstelling tot een harde schijf (HDD) die een draaiende schijf gebruikt. ',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Super Storage Device', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Static Storage Disk', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Solid State Drive', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Speedy Storage Disk', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een tweede vraag toe en vang de vraagId op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een belangrijk voordeel van een SSD ten opzichte van een HDD?',
+        'SSD''s hebben geen bewegende onderdelen, waardoor ze minder vatbaar zijn voor fysieke schade en sneller zijn dan HDD''s, die afhankelijk zijn van draaiende schijven.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Grotere opslagcapaciteit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Goedkoper in prijs', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Geen bewegende onderdelen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Meer lawaai bij gebruik', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is typisch sneller bij een SSD vergeleken met een HDD?',
+        'SSD''s kunnen veel sneller data lezen en schrijven dan HDD''s, omdat er geen mechanische onderdelen zijn die moeten bewegen om toegang te krijgen tot de data.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Toegangstijd tot data', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Verbruik van elektriciteit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Geluidsproductie', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Opwarmtijd van de schijf', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er met de data op een SSD wanneer de stroom uitvalt?',
+        'SSD''s bewaren hun data zelfs als de stroom uitvalt, omdat ze gebruik maken van flashgeheugen, wat niet afhankelijk is van continue stroom om gegevens te behouden.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Alles wordt gewist', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen tijdelijke bestanden blijven bewaard', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Data blijft behouden', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De SSD wordt onbruikbaar', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke aansluiting wordt vaak gebruikt bij M.2 SSD’s?',
+        'M.2 SSD''s gebruiken vaak de NVMe (Non-Volatile Memory Express) interface, die veel sneller is dan de SATA-interface, waardoor ze hogere snelheden voor gegevensoverdracht kunnen bieden. ',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'USB-C', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'SATA', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'NVMe', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'VGA', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is het nadeel van veelvuldig schrijven op een SSD? ',
+        'SSD''s hebben een beperkt aantal schrijfcycli voordat ze beginnen te degraderen. Wanneer je vaak naar een SSD schrijft, vermindert de levensduur van het geheugen, omdat elke cel in een SSD een bepaald aantal schrijfcycli heeft.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De SSD wordt trager', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De SSD slijt sneller', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De SSD wordt heter', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De SSD verliest garantie', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarom is een SSD stiller dan een HDD?',
+        'Omdat een SSD geen mechanische, draaiende schijven heeft, maakt hij geen geluid. HDD''s maken wel geluid vanwege de draaiende schijven en de lees-/schrijfkoppen die bewegen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Omdat SSD’s beter geïsoleerd zijn', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Omdat SSD’s koelers hebben', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Omdat een SSD geen draaiende schijven heeft', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Omdat een SSD onder water werkt', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent ‘read speed’ bij een SSD?',
+        '"Read speed" verwijst naar de snelheid waarmee een SSD gegevens kan lezen. Dit is een belangrijke factor bij het bepalen van de prestaties van een SSD. ',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Hoe snel je bestanden kunt bewerken', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hoeveel data je tegelijk kunt openen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hoe snel je data van de SSD kunt lezen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hoe vaak de SSD geüpdatet moet worden', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als een SSD vol raakt?',
+        'Wanneer een SSD bijna vol is, kan de snelheid van de lees- en schrijfbewerkingen afnemen, omdat er minder vrije ruimte is om gegevens efficiënt te verdelen en beheren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'SSD')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De SSD explodeert', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De prestaties kunnen afnemen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De SSD schakelt automatisch uit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Data wordt automatisch naar de cloud verplaatst', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor staat RAM?',
+        'RAM staat voor "Random Access Memory", een snel geheugen dat de computer gebruikt om tijdelijke gegevens in op te slaan terwijl programma’s draaien. "Random access" betekent dat elk geheugenadres direct toegankelijk is.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Rapid Access Module', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Random Access Memory', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Read And Modify', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Real-time Active Memory', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de belangrijkste functie van RAM in een computer?',
+        'RAM slaat tijdelijk gegevens op die de computer actief gebruikt, zoals geopende programma’s en bestanden. Zodra je de computer uitschakelt, verdwijnt deze informatie.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Permanente opslag', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Tijdelijke opslag van actieve gegevens', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Koelen van de CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Verzenden van e-mails', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er met RAM als je de computer uitschakelt?',
+        'RAM is vluchtig geheugen (volatiel), wat betekent dat het zijn inhoud verliest zodra de stroom uitvalt of de computer wordt uitgezet.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Data wordt opgeslagen op de harde schijf', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Data blijft behouden', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Data wordt gewist', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM schakelt automatisch over naar SSD', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke eenheid wordt gebruikt om RAM-capaciteit aan te duiden?',
+        'RAM-capaciteit wordt meestal uitgedrukt in gigabytes (GB), wat aangeeft hoeveel gegevens er tijdelijk kunnen worden opgeslagen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Watt', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Hertz', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Gigabyte', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Volt', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is sneller: DDR3 of DDR4 RAM?',
+        'DDR4 RAM is de opvolger van DDR3 en biedt hogere kloksnelheden, meer bandbreedte en efficiënter energieverbruik, wat zorgt voor betere prestaties.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'DDR3', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'DDR4', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Beide zijn gelijk', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hangt af van de kleur', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een gevolg van te weinig RAM?',
+        'Als er te weinig RAM is, moet het systeem gebruik maken van trage opslag (zoals de harde schijf) om data tijdelijk op te slaan, wat leidt tot vertraging of vastlopers.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het scherm wordt zwart', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Programma’s starten sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het systeem wordt traag of loopt vast', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De harde schijf crasht', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Hoe kun je het RAM-geheugen van een computer uitbreiden?',
+        'Je kunt de geheugencapaciteit uitbreiden door extra RAM-modules (sticks) toe te voegen aan de vrije slots op het moederbord, zolang het systeem dat ondersteunt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Door een nieuwe SSD te plaatsen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Door een software-update', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Door extra RAM-modules te installeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Door het scherm te vergroten', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is overklokken van RAM?',
+        'Overklokken betekent dat je de snelheid van het RAM verhoogt boven de standaardinstellingen, om betere prestaties te behalen. Dit kan meer warmte en instabiliteit veroorzaken als het niet goed gebeurt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het verwijderen van RAM', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'RAM trager laten lopen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM sneller laten werken dan fabrieksinstelling', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RAM formatteren', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als je RAM uit een draaiende computer verwijdert?',
+        'RAM is essentieel voor het functioneren van de computer. Als je het verwijdert terwijl het systeem draait, raakt het systeem cruciale gegevens kwijt en crasht het vrijwel onmiddellijk — vaak met een "Blue Screen of Death" (BSOD) of een harde reset.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'RAM stick')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De computer wordt sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Je krijgt een BSOD of crash', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De computer gaat in slaapstand', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Niks, dat mag gewoon', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor staat de afkorting PSU?',
+        'PSU betekent Power Supply Unit. Dit is het onderdeel in een computer dat de stroom van het stopcontact omzet naar spanningen die geschikt zijn voor de interne componenten van de computer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Power Source Unit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Power Storage Unit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Power Supply Unit', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Peripheral Supply Unit', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de hoofdtaak van een PSU?',
+        'De PSU zet wisselstroom (AC) uit het stopcontact om naar gelijkstroom (DC) en verdeelt deze naar de juiste spanningsniveaus voor onderdelen zoals het moederbord, CPU, GPU, enz.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Beeldsignalen verwerken', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Koelen van de computer', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Spanning omzetten en leveren aan componenten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Software updaten', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke netspanningsvorm zet een PSU om naar bruikbare stroom voor een pc?',
+        'Computers werken intern op gelijkstroom (DC), terwijl stopcontacten wisselstroom (AC) leveren. De PSU verzorgt die omzetting.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'AC naar DC', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'DC naar AC', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'DC naar DC', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'AC naar AC', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als je een PSU gebruikt met te weinig vermogen?',
+        'Als de PSU niet genoeg vermogen levert voor alle aangesloten componenten, kan het systeem instabiel worden, vastlopen, of zelfs helemaal niet opstarten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Alles werkt gewoon', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Je systeem draait langzamer', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De pc kan crashen of niet opstarten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De videokaart werkt sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een typische eenheid voor het vermogen van een PSU?',
+        'Het vermogen van een PSU wordt uitgedrukt in watt (W), wat aangeeft hoeveel elektrische energie de PSU per seconde kan leveren aan het systeem.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Volt', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Ampère', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Watt', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Ohm', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de functie van de ventilator in een PSU?',
+        'De PSU-ventilator voert warmte af die ontstaat bij het omzetten van stroom. Zonder koeling zou de PSU oververhit raken, wat gevaarlijk is voor zowel de PSU als andere componenten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Esthetisch', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Alleen actief bij hoge belasting', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Koelen van de PSU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Data verzenden naar het moederbord', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als de PSU oververhit raakt?',
+        'Moderne PSU''s hebben een thermische beveiliging. Als ze te heet worden, schakelen ze automatisch uit om schade te voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Hij schakelt zichzelf uit', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Hij versnelt de ventilator permanent', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hij verandert naar 5V-stand', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hij activeert extra geheugen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een risico van een slechte kwaliteit PSU?',
+        'Een slechte PSU kan onstabiele of verkeerde spanningen leveren, wat schade kan toebrengen aan het moederbord, de CPU, GPU of opslagapparaten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Lagere internetsnelheid', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Beschadiging van componenten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Minder frames per seconde', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Meer stof in de kast', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent ‘overvoltage protection’ (OVP)?',
+        'OVP zorgt ervoor dat als de spanning boven een veilige limiet komt, de PSU de stroomtoevoer stopt of afregelt om schade aan onderdelen te voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Voorkomt spanningsverlies', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Verhoogt de spanning', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Beschermt tegen te hoge spanning', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Zorgt voor meer stroomtoevoer', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        ' Wat gebeurt er als je een 650W PSU gebruikt in een systeem dat maar 300W nodig heeft?',
+        'Een PSU levert alleen het vermogen dat het systeem vraagt. Dus als je systeem 300W nodig heeft, levert de 650W PSU gewoon 300W – er is geen verspilling of gevaar.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Voeding')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Alles gaat kapot', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Er is geen verschil, het systeem gebruikt wat nodig is', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het systeem draait sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Er komt rook uit', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor staat de afkorting NIC?',
+        'NIC betekent Network Interface Card, oftewel netwerkkaart. Dit is een hardwarecomponent waarmee een computer verbinding kan maken met een netwerk, zoals het internet of een lokaal netwerk.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Network Internal Chip', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Net Interface Card', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Network Interface Card', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Net Input Connector', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de hoofdtaak van een netwerkkaart?',
+        'De netwerkkaart zorgt ervoor dat je computer gegevens kan verzenden en ontvangen via een netwerk, zoals toegang tot websites of communicatie met andere apparaten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Back-ups maken', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Verbinden met opslag', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Verbinding maken met een netwerk', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Video’s versnellen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke poort wordt typisch gebruikt door een bedrade netwerkkaart?',
+        'De RJ45-poort is de standaard aansluiting voor Ethernet-kabels en dus voor bekabelde netwerken. Andere poorten zoals HDMI of USB zijn niet bedoeld voor netwerkaansluitingen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'HDMI', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'USB', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RJ45', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'VGA', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent Mbps bij netwerkkaarten?',
+        'Mbps staat voor "megabits per seconde" en geeft aan hoe snel gegevens via de netwerkverbinding kunnen worden verzonden of ontvangen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Mega bits per second', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Mega bytes per system', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Multiple bit packet speed', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Macro bandwidth power speed', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke snelheden ondersteunen de meeste moderne netwerkkaarten?',
+        'Moderne netwerkkaarten ondersteunen meerdere snelheden: 10 Mbps (oud), 100 Mbps (Fast Ethernet), 1000 Mbps (Gigabit Ethernet) en sommige zelfs 2500 Mbps (2.5G Ethernet).',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT '10/100 Mbps', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  '10/100/1000/2500 Mbps', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT '1000/2000 Mbps', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen 1 Gbps', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een MAC-adres?',
+        'Een MAC-adres (Media Access Control) is een uniek identificatienummer dat aan elke netwerkkaart is toegekend. Het wordt gebruikt om apparaten op een lokaal netwerk te herkennen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het IP-adres van Apple', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Een uniek hardware-adres van een netwerkkaart', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een softwareprogramma', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een type router', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is het verschil tussen een geïntegreerde en een aparte netwerkkaart?',
+        'Geïntegreerde netwerkkaarten zijn ingebouwd in het moederbord. Aparte netwerkkaarten zijn losse uitbreidingskaarten die je toevoegt via een slot, vaak voor betere prestaties of extra functies.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De aparte kaart is draadloos', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Een aparte kaart is extern', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De geïntegreerde kaart zit op het moederbord', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De geïntegreerde kaart heeft geen poorten', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Hoe wordt een netwerkkaart meestal verbonden met een pc?',
+        'Aparte netwerkkaarten worden vaak aangesloten via een PCIe-slot (Peripheral Component Interconnect Express) op het moederbord. Dit biedt hoge snelheden en flexibiliteit.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Via SATA', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Via PCIe-slot', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Via HDMI', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Via CMOS', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat doet een netwerkkaart als er een botsing is op het netwerk?',
+        'Bij een botsing op het netwerk (collision), zoals in oudere Ethernet-netwerken, wacht de netwerkkaart een willekeurige tijd en probeert daarna het datapakket opnieuw te verzenden. Dit voorkomt dat de botsing zich herhaalt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Schakelt uit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Wacht en verzendt opnieuw', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Verliest alle data', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Neemt controle over het netwerk', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Hoe weet een netwerkkaart waar een pakketje naartoe moet?',
+        'Elke netwerkkaart heeft een uniek MAC-adres. Netwerkpakketten bevatten het MAC-adres van de ontvanger, zodat de netwerkkaart weet of het pakket voor haar bedoeld is.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Netwerk kaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Op basis van bestandsnaam', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Aan de hand van de MAC-adres', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Door de hostname', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Via de serienummer van de harde schijf', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is het moederbord in een computer?',
+        'Het moederbord is het hoofdbord in een computer waarop alle essentiële componenten (CPU, RAM, opslag, uitbreidingskaarten) direct of indirect worden aangesloten. Het zorgt voor communicatie tussen al deze onderdelen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De stroomvoorziening', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het opslagmedium', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De centrale printplaat waar alle componenten op worden aangesloten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen het geheugen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een andere naam voor moederbord?',
+        '"Mainboard" is een synoniem voor "moederbord" (in het Engels vaak ook "motherboard"). Het verwijst naar hetzelfde centrale circuitbord in de computer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Mainboard', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hardboard', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Backplate', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke component wordt direct op het moederbord geplaatst?',
+        'De CPU (processor) wordt in een speciale aansluiting (de socket) op het moederbord geplaatst. Andere apparaten zoals monitoren en toetsenborden worden niet direct op het moederbord aangesloten, maar via poorten of tussenliggende apparaten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Monitor', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'CPU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Toetsenbord', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Netadapter', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor dient de chipset op een moederbord?',
+        'De chipset coördineert de communicatie tussen de CPU, RAM, opslag, en andere randapparaten. Het bepaalt ook welke functies en snelheden een moederbord ondersteunt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Voor koeling', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Voor de opslag', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor het regelen van dataverkeer tussen componenten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor de geluidskaart', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een socket op een moederbord?',
+        'De socket is de fysieke en elektrische aansluiting waarin de CPU wordt geplaatst. Verschillende processoren vereisen verschillende sockets.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een poort voor de videokaart', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Een plek voor het RAM', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De aansluiting voor de CPU', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De ingang voor stroom', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een functie van de BIOS of UEFI?',
+        'BIOS (Basic Input/Output System) of UEFI (de modernere versie) initialiseert de hardware bij het aanzetten van de computer en start daarna het besturingssysteem op vanaf een opslagapparaat.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Bestanden opslaan', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Besturingssysteem opstarten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Geluid produceren', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Netwerkconfiguratie beheren', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor dienen SATA-poorten op een moederbord?',
+        'SATA-poorten worden gebruikt om harde schijven, SSD’s en optische drives aan te sluiten op het moederbord zodat ze data kunnen uitwisselen met de computer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Voor beeldsignaal', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Voor netwerkkabels', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor het aansluiten van opslagapparaten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor ventilatoren', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor dient de CMOS-batterij op een moederbord?',
+        'De CMOS-batterij voorziet een klein geheugenchipje van stroom, zodat BIOS-instellingen en systeemklok behouden blijven als de computer is uitgeschakeld.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Voor verlichting', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Om de ventilator aan te sturen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Om BIOS-instellingen en tijd te onthouden', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor opslag van bestanden', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent "onboard audio"?',
+        'Onboard audio betekent dat het moederbord een ingebouwde geluidschip heeft, zodat je geen aparte geluidskaart nodig hebt om audio af te spelen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Moederbord')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Externe geluidskaart', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Geluidschip geïntegreerd op het moederbord', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Luidspreker in de kast', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Audio via de grafische kaart', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor staat HDD?',
+        'HDD staat voor "Hard Disk Drive", een mechanisch opslagapparaat dat gebruikmaakt van ronddraaiende magnetische schijven om gegevens op te slaan.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'High Data Device', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Hard Disk Drive', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Heavy Data Distributor', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hybrid Disk Driver', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de belangrijkste functie van een HDD?',
+        'Een HDD wordt gebruikt om gegevens permanent op te slaan, zelfs wanneer de computer wordt uitgeschakeld. Denk aan je besturingssysteem, documenten en programma’s.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Koelen van de computer', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Tijdelijke opslag', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Permanente gegevensopslag', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Internetverbinding beheren', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat draait er letterlijk rond in een HDD?',
+        'Binnenin een HDD bevinden zich één of meerdere platters die ronddraaien om gegevens te kunnen lezen of schrijven via een lees-/schrijfkop.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De ventilator', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'De printplaat', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Magnetische schijven (platters)', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De koperen spoel', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Hoe wordt data gelezen of geschreven op een HDD?',
+        'Een kleine lees-/schrijfkop zweeft net boven het oppervlak van de platter en leest of schrijft data door magnetische veranderingen aan te brengen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Via laserlicht', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Met een magnetische leeskop', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Door druk op de plaat', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Met een pincet', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een belangrijk nadeel van een HDD vergeleken met een SSD?',
+        'Doordat HDD’s mechanische onderdelen hebben, zijn ze trager in gegevensoverdracht en gevoeliger voor schade bij stoten of vallen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'HDD''s zijn duurder', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'HDD''s zijn kleiner', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'HDD’s zijn trager en gevoeliger voor schokken', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'HDD’s gebruiken minder stroom', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als je een draaiende HDD hard laat vallen?',
+        'Door de bewegende onderdelen binnenin kan een schok ernstige schade veroorzaken aan de platter of lees-/schrijfkop, wat leidt tot dataverlies.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Niks, hij is schokbestendig', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Kan fysieke schade en dataverlies veroorzaken', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hij wordt sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen de ventilator valt uit', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'In welke eenheid wordt opslagcapaciteit van HDD’s gemeten?',
+        'Opslagcapaciteit wordt gemeten in GB of TB, wat aangeeft hoeveel data er op de schijf kan worden opgeslagen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Hertz', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Volt', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Gigabyte / Terabyte', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'RPM', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent RPM bij HDD’s?',
+        'RPM geeft aan hoe snel de platters in de HDD ronddraaien. Hoe hoger het aantal toeren per minuut, hoe sneller de schijf doorgaans data kan lezen/schrijven.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Real Power Management', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Rounds per Module', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Revolutions Per Minute', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Read Performance Metric', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een "platter" in een HDD?',
+        'De platter is het fysieke onderdeel waar de data effectief wordt bewaard. Elke platter heeft een magnetisch oppervlak waar informatie op wordt geschreven.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De voeding van de schijf', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'De printplaat aan de onderkant', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een ronddraaiende magnetische schijf waarop data wordt opgeslagen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De buitenkant van de HDD', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Hoe worden gegevens opgeslagen op een HDD?',
+        'Data wordt op HDD’s magnetisch opgeslagen. De lees-/schrijfkop wijzigt het magnetisme van kleine gebieden op de platter om nullen en enen vast te leggen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Met behulp van licht', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Door elektrische lading', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Magnetisch', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'In rooksignalen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een typische aansluiting voor een moderne HDD?',
+        'De meeste moderne HDD’s gebruiken een SATA-aansluiting voor dataoverdracht naar het moederbord.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'VGA', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'SATA', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'HDMI', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'PCIe', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als een HDD te vol raakt?',
+        'Als een HDD bijna vol is, duurt het langer om bestanden op te slaan of te vinden, en kan het systeem merkbaar trager worden.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Harde schijf')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Hij werkt sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Hij stopt volledig', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De prestaties kunnen vertragen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De ventilator gaat harder draaien', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor staat de afkorting GPU?',
+        'Een GPU is een processor die speciaal ontworpen is voor grafische en visuele berekeningen, zoals het weergeven van beelden, video en 3D.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'General Processing Unit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Graphics Processing Unit', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Graphical Power Unit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Global Pixel Unit', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de hoofdtaak van een GPU?',
+        'De GPU verwerkt alle visuele informatie op je scherm. Denk aan video''s, games en zelfs sommige AI-taken.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Data opslaan', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Netwerken beheren', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Beeld en grafische berekeningen uitvoeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Muziek afspelen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een andere naam voor een losse GPU?',
+        'Een losse of dedicated GPU wordt vaak aangeduid als videokaart, en is een apart uitbreidingskaartje in je pc.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'RAM-kaart', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Videokaart', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Netwerkkaart', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Moederbord', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is VRAM op een GPU?',
+        'VRAM (Video RAM) is speciaal geheugen op de GPU dat beelden, texturen en grafische informatie opslaat voor snelle toegang.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Extra opslag', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Geheugen speciaal voor grafische data', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een type ventilator', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Geheugen op het moederbord', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarvoor is een krachtige GPU het meest nodig?',
+        'Deze taken vereisen veel rekenkracht en parallelle verwerking, iets waar GPU’s in uitblinken.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Tekstverwerking', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'E-mail lezen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Gaming, 3D-rendering en AI-berekeningen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Printen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Kan een computer ook werken zonder een aparte GPU?',
+        'Veel moderne CPU’s hebben een ingebouwde GPU die lichte grafische taken kan uitvoeren zonder aparte videokaart.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Nee', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Ja, als de CPU geïntegreerde graphics heeft', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen in Linux', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen met SSD', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat doet een GPU-koeler?',
+        'Tijdens intensief gebruik produceert een GPU veel warmte. De koeler voorkomt oververhitting door deze warmte af te voeren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Maakt het beeld scherper', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Voert warmte af van de grafische chip', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Verbindt meerdere schermen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Zorgt voor hogere FPS', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent FPS in grafische prestaties?',
+        'FPS geeft aan hoeveel beelden per seconde worden weergegeven. Hoe hoger de FPS, hoe vloeiender de beeldweergave.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'File Protection Service', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Frames Per Second', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Frequency Pixel Sync', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Fast Power Supply', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is het doel van een GPU-benchmark?',
+        'Een benchmark test de prestaties van de GPU en vergelijkt die met andere kaarten om te bepalen hoe krachtig hij is.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Temperatuur testen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Snelheid meten en vergelijken', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Geluid meten', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De GPU resetten', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is overklokken van een GPU?',
+        'Bij overklokken wordt de GPU sneller laten werken dan de fabrieksinstelling om betere prestaties te halen, meestal voor gaming of zware toepassingen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Videokaart')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De GPU trager laten werken', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Meer geheugen toevoegen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De kloksnelheid verhogen voor betere prestaties', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De GPU uitschakelen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de primaire functie van een CPU-koeler?',
+        'De CPU produceert veel warmte tijdens gebruik. De koeler voert deze warmte af om oververhitting en schade aan de processor te voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Data verwerken', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Warmte afvoeren van de processor', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Extra stroom leveren', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Internet versnellen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke twee hoofdtypen CPU-koelers bestaan er?',
+        'CPU-koelers zijn ofwel luchtkoelers, die lucht gebruiken om warmte af te voeren, of waterkoelers, die een vloeistofcirculatie gebruiken.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Actief en passief', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Lucht en water', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Intern en extern', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Digitaal en analoog', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat bevat een luchtkoeler meestal?',
+        'Een luchtkoeler bestaat uit een heatsink (die de warmte absorbeert) en een ventilator (die de warme lucht afvoert).',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Alleen een ventilator', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Alleen een radiator', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een heatsink en een ventilator', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een batterij en een sensor', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een AIO-koeler?',
+        'AIO (All-In-One) koeling is een gesloten vloeistofkoelsysteem met een pomp, radiator en vloeistof voor efficiënte warmteafvoer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een passieve koeling', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Een vloeistofkoeler met geïntegreerde pomp en radiator', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een grafische kaart', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een BIOS-instelling', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarom is goede koeling belangrijk voor een CPU?',
+        'Goede koeling voorkomt dat de CPU oververhit raakt, wat kan leiden tot prestatieverlies of zelfs schade aan de processor.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Om de ventilatoren harder te laten draaien', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Om oververhitting en prestatieverlies te voorkomen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor betere kleuren op het scherm', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Om opslag te versnellen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een “thermal paste” (koelpasta)?',
+        'Thermal paste wordt tussen de CPU en het koelblok aangebracht om de thermische weerstand te verminderen en de warmteoverdracht te verbeteren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een soort lijm om onderdelen vast te zetten', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Een isolator', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een geleidende pasta tussen CPU en koelblok', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een koelsysteem', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat doet een heatsink?',
+        'Een heatsink is een koellichaam dat de warmte van de CPU opvangt en naar een groter oppervlak afvoert voor betere warmteafvoer.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Leidt warmte van de CPU af naar een groter oppervlak', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Blaast lucht', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Meet de temperatuur', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Verhoogt de snelheid', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een voordeel van waterkoeling t.o.v. luchtkoeling?',
+        'Waterkoeling is vaak efficiënter in het afvoeren van warmte, vooral onder zware belasting, omdat vloeistof een hogere warmtecapaciteit heeft dan lucht.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Goedkoper', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Minder onderhoud', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Beter in warmte-afvoer bij hoge belasting', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Werkt zonder ventilatoren', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarom is airflow in de behuizing belangrijk bij CPU-koeling?',
+        'Waterkoeling kan lekken veroorzaken, en het systeem is complexer dan luchtkoeling, met meer kans op onderhoudsproblemen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Voor geluid', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Voor verlichting', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor efficiënte afvoer van warme lucht', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Voor installatiegemak', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat gebeurt er als een CPU oververhit raakt?',
+        'Als de CPU oververhit raakt, kan de processor zichzelf vertragen of uitschakelen om schade te voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Niks, dat hoort zo', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'De pc werkt sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De CPU wordt trager of schakelt zichzelf uit', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Alleen de ventilator stopt', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is PWM bij ventilatoren?',
+        'PWM (Pulse Width Modulation) is een methode om de snelheid van ventilatoren aan te passen door de aan/uit-tijd van het signaal te variëren, wat de koeling efficiënter maakt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor koeler')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Power Watt Management', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Pulse Width Modulation voor snelheidsregeling', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Performance With Maintenance', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Parallel Wind Motion', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat bepaalt de snelheid van een CPU?',
+        'De kloksnelheid, gemeten in gigahertz (GHz), bepaalt hoeveel instructies de CPU per seconde kan uitvoeren. Hoe hoger de kloksnelheid, hoe sneller de CPU.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het aantal cores', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'De kloksnelheid', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het aantal geheugenkanalen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het geheugenformaat', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent de term ''multi-core'' bij een CPU?',
+        '''Multi-core'' betekent dat de CPU meerdere verwerkingscores heeft, wat de mogelijkheid biedt om meerdere taken tegelijkertijd uit te voeren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'De CPU heeft meerdere koelkernen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'De CPU heeft meerdere cores', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De CPU kan meerdere softwareprogramma''s tegelijk draaien', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De CPU heeft meerdere types geheugen', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de rol van de ''cache'' in een CPU?',
+        'De cache is een klein, snel geheugen dat gegevens tijdelijk opslaat die vaak door de CPU worden gebruikt, wat de snelheid van de processor verhoogt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het beheren van de invoer van gegevens', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het tijdelijk opslaan van veelgebruikte gegevens voor snellere toegang', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het uitvoeren van grafische berekeningen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verhogen van de CPU-snelheid', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een belangrijke eigenschap van een ''hyper-threaded'' CPU?',
+        'Hyper-threading is een technologie waarmee één core meerdere threads tegelijk kan verwerken, waardoor de prestaties in multitasking-toepassingen verbeteren.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het heeft extra cores', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het kan meerdere threads per core uitvoeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het heeft betere koeling', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verbruikt minder stroom', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een ''thermal paste'' en waarom wordt het gebruikt in combinatie met een CPU?',
+        'Thermal paste wordt tussen de CPU en de koelplaat aangebracht om de thermische geleiding te verbeteren, zodat de warmte van de CPU efficiënter naar de koeler wordt afgevoerd.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het helpt de CPU sneller werken', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het is een isolator voor de CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verbetert de warmteoverdracht van de CPU naar de koeler', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het maakt de CPU meer energiezuinig', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent het als een CPU ''overclockable'' is?',
+        'Een ''overclockable'' CPU kan boven zijn standaardkloksnelheid draaien, wat zorgt voor hogere prestaties, maar vereist goede koeling om schade te voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het kan automatisch zijn snelheid aanpassen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het kan sneller draaien dan de standaardkloksnelheid zonder schade', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het heeft meerdere cores', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het heeft een betere cache', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een voordeel van een CPU met meerdere cores?',
+        'Meerdere cores maken het mogelijk om verschillende taken tegelijkertijd te verwerken, wat de prestaties verbetert bij multitasking en complexere toepassingen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Processor')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het kan meer energie besparen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het kan meerdere taken gelijktijdig uitvoeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het is kleiner en compacter', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het heeft een hogere kloksnelheid', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de belangrijkste functie van de computerbehuizing (case)?',
+        'De behuizing beschermt de interne componenten tegen schade, stof en andere invloeden van buitenaf. Het biedt ook ruimte voor luchtstroom om de temperatuur van de componenten te regelen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het verbruiken van stroom', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het beschermen van de interne componenten en zorgen voor luchtstroom', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verbeteren van de prestaties van de CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het opslaan van gegevens', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welk van de volgende is een veelgebruikte materiaalsoort voor computerbehuizingen?',
+        'Aluminium is een veelgebruikte materiaalsoort voor computerbehuizingen omdat het licht is, goed warmte afvoert en relatief goedkoop is.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Glas', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Aluminium', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Hout', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Rubber', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarom is luchtstroom belangrijk in een computerbehuizing?',
+        'Luchtstroom helpt bij het afvoeren van de warmte die wordt gegenereerd door de interne componenten van de computer, waardoor oververhitting wordt voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het verhoogt de opslagcapaciteit', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het voorkomt oververhitting van de componenten', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het maakt de computer sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verlaagt de kosten van de hardware', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is een ''windowed case''?',
+        'Een ''windowed case'' heeft vaak een doorzichtig paneel aan de zijkant van de behuizing, waardoor je de interne componenten kunt zien, wat populair is voor esthetische doeleinden.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een case met een scherm om de prestaties van de CPU te monitoren', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Een case met een doorzichtige zijpaneel zodat je de interne componenten kunt zien', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een case met extra ventilatie', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een case zonder externe poorten', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Waarom zou iemand kiezen voor een ''tool-less'' case?',
+        'Een ''tool-less'' case biedt een ontwerp waarbij geen gereedschap nodig is voor het installeren of vervangen van componenten, wat het proces eenvoudiger maakt.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het is goedkoper', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het maakt het gemakkelijker om componenten in de case te installeren of te vervangen zonder gereedschap', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het is groter en biedt meer opslagruimte', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verbetert de koelprestaties', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is de functie van kabelmanagement in een computerbehuizing?',
+        'Kabelmanagement helpt bij het netjes organiseren van de kabels in de behuizing, wat niet alleen de esthetiek verbetert, maar ook de luchtstroom bevordert.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het verbergen van het merk van de componenten', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het organiseren van kabels voor een betere netheid', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verhogen van de prestaties van de CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verbeteren van de geluidsisolatie', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat betekent ''airflow'' in de context van een computerbehuizing?',
+        '''Airflow'' verwijst naar de manier waarop lucht door de behuizing beweegt, wat essentieel is voor het afvoeren van warmte en het behouden van de temperatuur van de componenten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het aantal schijven die in de case passen', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'De manier waarop lucht door de behuizing stroomt om warmte af te voeren', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het aantal ventilatoren dat de case bevat', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'De hoeveelheid stof die in de case komt', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke van de volgende eigenschappen maakt een computerbehuizing geschikt voor gaming?',
+        'Voor gaming is een goede koeling essentieel, vooral tijdens zware belasting. Extra ventilatoren en een goede luchtstroom helpen bij het koelen van krachtige componenten.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Een compact formaat', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Extra ventilatoren en een goede luchtstroom', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Een stille werking', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Geen extra poorten', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Wat is het voordeel van een case met een goede koeling?',
+        'Goede koeling helpt de interne componenten van de computer op een veilige temperatuur te houden, wat hun levensduur verlengt door oververhitting te voorkomen.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het vermindert de kosten van de CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het verlengt de levensduur van de componenten door oververhitting te voorkomen', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het maakt de computer sneller', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verbetert de geluidskwaliteit van de speakers', FALSE, 0, "vraagId" FROM nieuwe_vraag;
+
+-- Voeg een extra vraag to en vang de vraagID op
+WITH nieuwe_vraag AS (
+    INSERT INTO "PCviewdb"."Vraag" ("vraag", "uitlegWaaromGoed", "categorieId")
+    VALUES (
+        'Welke van de volgende beweringen is waar over geluidsisolatie in een computerbehuizing?',
+        'Geluidsisolatie in een behuizing helpt het geluid van de ventilatoren en andere interne componenten te dempen, wat resulteert in een stillere werking.',
+        (SELECT "categorieId" FROM "PCviewdb"."Categorie" WHERE "naam" = 'Behuizing')
+    )
+    RETURNING "vraagId"
+)
+-- Voeg de antwoorden toe die bij die tweede vraag horen
+INSERT INTO "PCviewdb"."Antwoord" ("antwoord", "correct", "score", "vraagId")
+SELECT 'Het verbetert de prestaties van de CPU', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT  'Het vermindert het geluid dat door de ventilatoren en andere componenten wordt veroorzaakt', TRUE, 1, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verlaagt de temperatuur van de interne componenten', FALSE, 0, "vraagId" FROM nieuwe_vraag
+UNION ALL
+SELECT 'Het verhoogt de efficiëntie van de luchtstroom', FALSE, 0, "vraagId" FROM nieuwe_vraag;
